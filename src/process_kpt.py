@@ -1,7 +1,6 @@
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import col
 import logging
-from chispa import *
 
 spark = SparkSession.builder \
     .master("local") \
@@ -120,6 +119,11 @@ if __name__ == "__main__":
 
     client_df, financial_df = kpt_obj.input_process()
     final_df = ProcessKPT.get_required_data(client_df, financial_df)
+
+    """The below code for writing dataframe to csv is not working in my local,
+    due to which converted to pandas in below lines"""
+    # final_df.write.csv('../client_data/output.csv')
+    # final_df.write.format('com.databricks.spark.csv').save('../client_data/output.csv')
 
     final_df.toPandas().to_csv('../client_data/output.csv')
     logger.info("Final output is exported to a csv in 'client_data' directory")
